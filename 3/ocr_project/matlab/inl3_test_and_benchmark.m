@@ -24,15 +24,15 @@
 
 %% Setup the names of the functions of your OCR system.
 
-mysystem.segmenter = 'im2segment_good2'; % What is the name of your segmentation-algorithm.
-mysystem.features = 'segment2features2'; % What is the name of your features-algorithm.
+mysystem.segmenter = 'im2segment'; % What is the name of your segmentation-algorithm.
+mysystem.features = 'segment2features'; % What is the name of your features-algorithm.
 mysystem.classifier = 'features2class'; % What is the name of your classification-algorithm.
 load classification_data
 mysystem.classification_data = classification_data;
 
 %% Choose dataset
 datadir = '../datasets/short1';     % Which folder of examples are you going to test it on
-%datadir = '../datasets/home2';     % Which folder of examples are you going to test it on
+% datadir = '../datasets/home2';     % Which folder of examples are you going to test it on
 
 %% Benchmark and visualize
 mode = 0; % debug modes 
