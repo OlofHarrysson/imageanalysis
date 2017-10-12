@@ -21,8 +21,6 @@ for ai in a:
       correponding_points.append((ai, bi))
 
 
-
-
 for p1, p2 in correponding_points:
   print("point {} corresponds to {}".format(p1, p2))
 

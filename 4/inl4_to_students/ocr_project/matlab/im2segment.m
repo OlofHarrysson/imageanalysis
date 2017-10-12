@@ -35,6 +35,7 @@ for kk = 1:nrofsegments
         segment_img(r(i), c(i)) = 1;
     end;
     
+    segment_img2 = imbinarize(segment_img, 0.1);
     % Set the final image
-    S{kk} = segment_img;
+    S{kk} = segment_img2;
 end;

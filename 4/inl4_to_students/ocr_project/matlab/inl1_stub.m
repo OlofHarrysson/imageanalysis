@@ -1,6 +1,6 @@
 %% Get the directory of a dataset
 
-datadir = '../datasets/short1';
+datadir = '../datasets/home3';
 a = dir(datadir);
 
 %% Select a filename
@@ -20,19 +20,12 @@ fclose(fid);
 
 %% Plot the image with ground truth as title
 
-figure(1); colormap(gray);
-imagesc(bild(:,1:200));
-title(facit);
+% figure(1); colormap(gray);
+% imagesc(bild(:,1:200));
+% title(facit);
 
 %% Run your segmentation code
 S = im2segment(bild);
+b = S{1};
+segment2features(b);
 
-%% Plot all the segments
-figure(2);
-for k = 1:length(S);
-  colormap(gray);
-  imagesc(S{k});
-  disp(['Segment nr: ' num2str(k) ' out of ' num2str(length(S)) '.']);
-  disp('Press a button to continue');
-  pause;
-end;

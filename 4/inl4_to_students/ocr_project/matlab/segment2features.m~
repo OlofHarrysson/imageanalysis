@@ -2,6 +2,8 @@ function features = segment2features(input_img)
 box = regionprops(input_img,'BoundingBox');
 cropped_img = imcrop(input_img, box.BoundingBox);
 
+% imshowpair(cropped_img, cropped_img, 'montage');
+
 width_crop = size(cropped_img, 2);
 height_crop = size(cropped_img, 1);
 
@@ -56,13 +58,12 @@ end
 
 features(13) = number_seg;
 
+bottom_of_cropped = cropped_img(end - 4:end, :);
+imshow(bottom_of_cropped)
+waitforbuttonpress
+
 D_img = double(cropped_img);
 x_filt = [-1 1];
 features(14) = sum(sum(abs(conv2(x_filt, D_img)))) / numel(cropped_img);
 
-bottom_of_cropped = cropped_img(end - 4:end, :);
-[labels, number_seg] = bwlabel(bottom_of_cropped, 8);
-nbr_feet = number_seg;
-features(15) = nbr_feet;
-
-features(16) = size(cropped_img,1) / size(cropped_img, 2);
+% Nbr feet. Take bottom 1/4 of image and bwlabel
