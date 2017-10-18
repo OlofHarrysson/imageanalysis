@@ -2,39 +2,30 @@ femfel_struct = load('femfel.mat');
 img1 = femfel_struct.femfel1;
 img2 = femfel_struct.femfel2;
 
-pad_size = 20;
-padded_img = padarray(img2, [pad_size,pad_size], 0);
+img1_cropped = img1(4:end, 2:end-3, :);
+height = size(img1, 1);
+width = size(img1, 2);
+img1_resized = imresize(img1_cropped, [height width]);
 
-% size(img1)
-% size(padded_img)
 
-color_depth = size('rgb', 2);
-total_c = zeros(781, 949, color_depth);
-for i = 1:color_depth
-    c = normxcorr2(img1(:,:,i), padded_img(:,:,i));
-    total_c(:,:,i) = c;
-%     figure, surf(c), shading flat;
-     
-end
 
-c_mean = mean(total_c, 3);
-[ypeak, xpeak] = find(c_mean==max(c_mean(:)));
-
-yoffSet = ypeak-size(img1,1);
-xoffSet = xpeak-size(img1,2);
-
-% figure
-% imshow(padded_img);
-% rect = imrect(gca, [xoffSet+1, yoffSet+1, size(img1,2), size(img1,1)]);
-cropped_img = imcrop(padded_img, [xoffSet+1, yoffSet+1, size(img1,2)-1, size(img1,1)-1]);
-% imshowpair(img1, cropped_img, 'montage');
-size(cropped_img)
+size(img1_cropped)
 size(img1)
 
+diff = abs(img1_resized - img2);
+imshow(diff);
+% imshowpair(img1_cropped, img1);
+% imshowpair(img1_resized, img2, 'montage');
+% imshowpair(img1_resized, img2, 'falsecolor');
+
+sigma = 4;
+blurred1 = imgaussfilt(img1, sigma);
+blurred2 = imgaussfilt(img2, sigma);
+
+diff = blurred1 - blurred2;
+
+% imshow(diff);
 % imshowpair(img1, img2, 'montage');
-imshow(img1);
-waitforbuttonpress
-imshow(img2);
-% imshowpair(img1, img2, 'falsecolor');
+% imshowpair(img1, img2, 'diff','Scaling','joint');
 % imshow(abs(cropped_img - img1));
 % imshow(abs(img2 - img1));
