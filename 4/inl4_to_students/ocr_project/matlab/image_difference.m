@@ -2,22 +2,39 @@ femfel_struct = load('femfel.mat');
 img1 = femfel_struct.femfel1;
 img2 = femfel_struct.femfel2;
 
-padded_img = padarray(img2, [20,20], 0);
+pad_size = 20;
+padded_img = padarray(img2, [pad_size,pad_size], 0);
 
 % size(img1)
 % size(padded_img)
 
 color_depth = size('rgb', 2);
-total_c
+total_c = zeros(781, 949, color_depth);
 for i = 1:color_depth
     c = normxcorr2(img1(:,:,i), padded_img(:,:,i));
-    total_c += c
+    total_c(:,:,i) = c;
 %     figure, surf(c), shading flat;
      
 end
 
-total_c
+c_mean = mean(total_c, 3);
+[ypeak, xpeak] = find(c_mean==max(c_mean(:)));
+
+yoffSet = ypeak-size(img1,1);
+xoffSet = xpeak-size(img1,2);
+
+% figure
+% imshow(padded_img);
+% rect = imrect(gca, [xoffSet+1, yoffSet+1, size(img1,2), size(img1,1)]);
+cropped_img = imcrop(padded_img, [xoffSet+1, yoffSet+1, size(img1,2)-1, size(img1,1)-1]);
+% imshowpair(img1, cropped_img, 'montage');
+size(cropped_img)
+size(img1)
 
 % imshowpair(img1, img2, 'montage');
+imshow(img1);
+waitforbuttonpress
+imshow(img2);
 % imshowpair(img1, img2, 'falsecolor');
-% imshow(abs(img1 - img2));
+% imshow(abs(cropped_img - img1));
+% imshow(abs(img2 - img1));
