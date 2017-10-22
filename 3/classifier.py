@@ -42,7 +42,8 @@ x = mat['X'].T.astype(np.int16)
 y = mat['Y'].T
 
 accuracies = []
-n_loops = 1
+accuracies_train = []
+n_loops = 100
 for i in range(n_loops):
   msk = np.random.rand(len(x)) < 0.8
 
@@ -52,7 +53,9 @@ for i in range(n_loops):
   test_x = x[~msk]
   test_y = y[~msk]
 
-  accuracies.append(nearest_neighbour(train_x, train_y, test_x, test_y, n_img_to_plot=3))
+  accuracies.append(nearest_neighbour(train_x, train_y, test_x, test_y, n_img_to_plot=0))
+  accuracies_train.append(nearest_neighbour(train_x, train_y, train_x, train_y, n_img_to_plot=0))
 
 print("Mean accuracy of {} loops: {}".format(n_loops, np.mean(accuracies)))
+print("Mean accuracy for the training data doing {} loops: {}".format(n_loops, np.mean(accuracies_train)))
 

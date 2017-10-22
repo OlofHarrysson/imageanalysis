@@ -1,7 +1,6 @@
 import numpy as np
 
 p1 = [[3, 2, 1, 0], [2, 2, 2, 0], [2, 1, 2, 1]]
-
 p2 = [[1, 2, 2, 3], [1, 1, 0, 2], [3, 1, 2, 0]]
 
 F = np.array([[-4, 2, -6], [3, 0, 7], [-6, 9, 1]])
@@ -21,7 +20,7 @@ for ai in a:
       correponding_points.append((ai, bi))
 
 
-for p1, p2 in correponding_points:
-  print("point {} corresponds to {}".format(p1, p2))
+for point1, point2 in correponding_points:
+  print("point {} corresponds to {}".format(point1, point2))
 
 

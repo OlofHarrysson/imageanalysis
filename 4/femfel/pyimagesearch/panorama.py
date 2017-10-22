@@ -28,7 +28,6 @@ class Stitcher:
 		# otherwise, apply a perspective warp to stitch the images
 		# together
 		(matches, H, status) = M
-		# result = cv2.warpPerspective(imageA, H, (imageB.shape[1], imageB.shape[0]))
 
 		result = cv2.warpPerspective(imageA, H, (imageA.shape[1], imageA.shape[0]), borderValue= (255, 255, 255))
 

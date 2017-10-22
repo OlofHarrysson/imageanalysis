@@ -31,6 +31,7 @@ features(7) = sum(sum(top_right)) / numel(top_right);
 features(8) = sum(sum(bottom_left)) / numel(bottom_left);
 features(9) = sum(sum(bottom_right)) / numel(bottom_right);
 
+% The perimiter of the letter
 perimiter = regionprops(input_img,'Perimeter');
 features(10) = perimiter.Perimeter / numel(cropped_img);
 
@@ -41,28 +42,22 @@ w_xy = weight_pos.Centroid;
 features(11) = w_xy(1) / width_crop; % For x
 features(12) = w_xy(2) / height_crop; % For y
 
-
+% Number segments on the inverted image
 compl_img = imcomplement(input_img);
 BW = bwareafilt(compl_img,[15 100000]);
 [labels, number_seg] = bwlabel(BW, 8);
-
-if number_seg > 3 % TODO: Remove once all datasets passes
-    imshow(input_img);
-    waitforbuttonpress
-    imshow(compl_img);
-    waitforbuttonpress
-    return
-end
-
 features(13) = number_seg;
 
+% Sum of edges in the x axis
 D_img = double(cropped_img);
 x_filt = [-1 1];
 features(14) = sum(sum(abs(conv2(x_filt, D_img)))) / numel(cropped_img);
 
+% Number of feet
 bottom_of_cropped = cropped_img(end - 4:end, :);
 [labels, number_seg] = bwlabel(bottom_of_cropped, 8);
 nbr_feet = number_seg;
 features(15) = nbr_feet;
 
+% Width to height ratio
 features(16) = size(cropped_img,1) / size(cropped_img, 2);

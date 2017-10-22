@@ -10,9 +10,8 @@ def least_squares(x, y):
   p = np.linalg.lstsq(A, y.T)
   k, c = p[0]
   least_square_error = p[1]
-  print("Least square error is {}".format(least_square_error))
 
-  return k, c
+  return k, c, least_square_error[0]
 
 
 def total_least_squares(x, y):
@@ -45,14 +44,46 @@ def total_least_squares(x, y):
 
   return y1, y2
 
+def distance_point_line(p1, p2, p3):
+  # line goes between p1 and p2.
+  p1 = np.asarray(p1)
+  p2 = np.asarray(p2)
+  p3 = np.asarray(p3)
+
+  return np.linalg.norm(np.cross(p2 - p1, p1 - p3)) / np.linalg.norm(p2 - p1)
+
 ############# START #############
 
 mat = scipy.io.loadmat('linjepunkter.mat')
 x = mat['x']
 y = mat['y']
 
-k, c = least_squares(x, y)
+k, c, least_square_error = least_squares(x, y)
 y1, y2 = total_least_squares(x, y)
+
+least_square_point1 = [x.flatten()[0], x.flatten()[0] * k + c]
+least_square_point2 = [x.flatten()[-1], x.flatten()[-1] * k + c]
+
+
+total_lsq_line1_point1 = [x.flatten()[0], y1[0]]
+total_lsq_line1_point2 = [x.flatten()[-1], y1[-1]]
+
+least_square_line_sum = [0, 0]
+total_lsq_line1_sum = [0, 0]
+for x_point, y_point in zip(x.flatten(), y.flatten()):
+  least_square_line_sum[1] += np.square(distance_point_line(least_square_point1, least_square_point2, [x_point, y_point]))
+  total_lsq_line1_sum[1] += np.square(distance_point_line(total_lsq_line1_point1, total_lsq_line1_point2, [x_point, y_point]))
+
+
+least_square_line_sum[0] = least_square_error
+total_lsq_line1_sum[0] = sum(np.square(np.abs(y1 - y.flatten())))
+
+print("Least square error for the least_square line is {}".format(least_square_line_sum[0]))
+print("Least square error for the total_least_square line is {}".format(total_lsq_line1_sum[0]))
+
+print("\nTotal least square error for the least_square line is {}".format(least_square_line_sum[1]))
+print("Total least square error for the total_least_square line is {}".format(total_lsq_line1_sum[1]))
+
 
 sorted_x = sorted(x[0])
 plt.plot(x, y, 'o')
